@@ -1,0 +1,26 @@
+<resources>
+        <string name="app_name">uShuttle</string>
+        <string name="action_settings">Settings</string>
+        <string name="action_search">Search</string>
+        <string name="drawer_open">Open</string>
+        <string name="drawer_close">Close</string>
+     
+        <string name="nav_item_home">Home</string>
+        <string name="nav_item_on_campus">On-Campus</string>
+        <string name="nav_item_off_campus">Off-Campus</string>
+     
+        <!-- navigation drawer item labels  -->
+        <string-array name="nav_drawer_labels">
+            <item>@string/nav_item_home</item>
+            <item>@string/nav_item_on_campus</item>
+            <item>@string/nav_item_off_campus</item>
+        </string-array>
+     
+        <string name="title_messages">On-Campus</string>
+        <string name="title_friends">Off-Campus</string>
+        <string name="title_home">Home</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_logo">Logo for home screen</string>
+</resources>
