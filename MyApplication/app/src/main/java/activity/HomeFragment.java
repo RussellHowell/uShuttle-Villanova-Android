@@ -12,21 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import russellhowell.ushuttle.R;
 
 
 public class HomeFragment extends Fragment {
 
+    uShuttle_home homeActivity;
     public HomeFragment(){
         //required empty constructor
     }
 
     Context context;
     public HomeFragment(Context c) {
-        // Required public constructor
+        //constructor that accepts context
         context=c;
+        homeActivity = (uShuttle_home) c;
     }
 
     @Override
@@ -54,12 +55,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast toast = Toast.makeText(context, "Handle Drawer Opening Via This Event", Toast.LENGTH_LONG);
-                toast.show();
-                FragmentDrawer fragDrawer = new FragmentDrawer(); //check if this has been called before to save memory
-
-
-                fragDrawer.openNavDrawer();
+                homeActivity.openNavDrawer();
 
             }
         });
@@ -78,10 +74,5 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-
-
-
-
 }
 

@@ -42,8 +42,12 @@ public class uShuttle_home extends ActionBarActivity implements FragmentDrawer.F
 
 
 
-
     }
+
+    public void openNavDrawer(){
+       drawerFragment.openNav();
+    }
+
 
 
     @Override
@@ -83,8 +87,8 @@ public class uShuttle_home extends ActionBarActivity implements FragmentDrawer.F
                 title = getString(R.string.title_home);
                 break;
             case 0:
-                fragment = new FriendsFragment();
-                title = getString(R.string.title_friends);
+                fragment = new OnCampusFragment(this);
+               // title = getString(R.string.title_on_campus);
                 break;
             case 1:
                 fragment = new MessagesFragment();
