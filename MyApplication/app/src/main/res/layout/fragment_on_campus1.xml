@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="androidhive.info.materialdesign.activity.OnCampusFragment"
+    android:id="@+id/onCampusLayout">
+
+
+
+
+    <ImageView
+        android:id="@+id/onCampusImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vu_campus"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        />
+
+
+    <!-- <TextView
+        android:id="@+id/onCampusLabel"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="40sp"
+        android:text="On Campus Shuttle"
+        android:textStyle="bold"
+        /> -->
+
+    <!--<TextView
+        android:id="@+id/onCampusDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_horizontal"
+        android:text="Weekdays 8:00am to 1:30am "
+        android:layout_alignBottom="@+id/onCampusImageView"
+        android:paddingBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        /> -->
+<RelativeLayout
+    android:layout_below="@id/onCampusImageView"
+    android:id="@+id/onCampusTripLayout"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:text="Starting Location"
+        android:id="@+id/StartLocationLabel" />
+
+
+
+
+    <!--
+        <Spinner
+            android:id="@+id/onCampusStartLocationsSpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:paddingRight="10dp"
+            >
+        </Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="34dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="Destination"
+            android:layout_alignTop="@+id/StartLocationLabel"
+            android:layout_alignRight="@+id/onCampusDestinationSpinner"
+            android:layout_alignEnd="@+id/onCampusDestinationSpinner"
+            android:layout_marginEnd="34dp" />
+
+        <Spinner
+            android:id="@+id/onCampusDestinationSpinner"
+
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:paddingLeft="10dp"
+            >
+        </Spinner>
+
+
+        <TextView
+            android:id="@+id/onCampusTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"
+            android:clickable="true"
+            /> -->
+
+         />
+
+
+
+</RelativeLayout>
+
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/goFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_progress"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/fab_colorPressed"
+        fab:fab_colorRipple="@color/fab_colorRipple"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

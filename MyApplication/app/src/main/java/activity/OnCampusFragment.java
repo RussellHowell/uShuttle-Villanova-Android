@@ -3,17 +3,22 @@ package activity;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import java.util.Calendar;
+import com.github.clans.fab.FloatingActionButton;
 
 import russellhowell.ushuttle.R;
 
@@ -24,7 +29,9 @@ public class OnCampusFragment extends Fragment {
     int hour;
     int minute;
     private TextView timeTextView;
-
+    private ImageView imageView;
+    private FloatingActionButton goFAB;
+    private RelativeLayout.LayoutParams fabLayoutParams;
     public OnCampusFragment() {
 
         // Required empty public constructor
@@ -56,8 +63,14 @@ public class OnCampusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_on_campus, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_on_campus1, container, false);
 
+        //Allow access to assets created in xml files for later use
+        imageView = (ImageView) rootView.findViewById(R.id.onCampusImageView);
+        goFAB = (FloatingActionButton) rootView.findViewById(R.id.goFab);
+
+
+        /*
         //call spinner creation method
         Spinner startingLocationSpinner =(Spinner) rootView.findViewById(R.id.onCampusStartLocationsSpinner);
         populateSpinners(startingLocationSpinner, context, R.array.on_campus_locations );
@@ -83,15 +96,30 @@ public class OnCampusFragment extends Fragment {
                 }
         );
 
-
-
-        // Inflate the layout for this fragment
-
+*/
 
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
 
+        final ViewTreeObserver observer = imageView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    observer.removeOnGlobalLayoutListener(this);
+                } else {
+                    observer.removeOnGlobalLayoutListener(this);
+                }
+                //Call setup for FAB after all views have been drawn in fragment
+                setUpFloatingActionButton();
+            }
+        });
+
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -110,6 +138,18 @@ public class OnCampusFragment extends Fragment {
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+    }
+
+    private void setUpFloatingActionButton(){
+        //Get dimensions of imageView at top of fragment
+        int imageHeight = imageView.getHeight();
+        int imageWidth = imageView.getWidth();
+
+        //Set up FAB's location based on imageView's dimensions and FAB's dimensions
+        fabLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
+        fabLayoutParams.setMargins(imageWidth - goFAB.getWidth()-40, imageHeight - (goFAB.getHeight()/2), 0, 0); //imageView will sit between two layouts
+        goFAB.setLayoutParams(fabLayoutParams);
 
     }
 

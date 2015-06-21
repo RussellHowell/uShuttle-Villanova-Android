@@ -6,4 +6,6 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#003366</color>
     <color name="colorAccent">#867A6E</color>
+    <color name="fab_colorPressed">#003366</color>
+    <color name="fab_colorRipple">#867A6E</color>
 </resources>
