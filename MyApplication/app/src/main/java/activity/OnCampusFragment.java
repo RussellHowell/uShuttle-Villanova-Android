@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.transition.Scene;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+
+import java.util.Calendar;
 
 import russellhowell.ushuttle.R;
 
@@ -32,6 +35,15 @@ public class OnCampusFragment extends Fragment {
     private ImageView imageView;
     private FloatingActionButton goFAB;
     private RelativeLayout.LayoutParams fabLayoutParams;
+    private RelativeLayout.LayoutParams fabClickedLayoutParams;
+
+    private Scene scene1;
+    private Scene scene2;
+    private Calendar calender;
+    private ViewGroup sceneRoot;
+
+  //  public BasicTransitionFragment newInstance(){return new BasicTransitionFragment();}
+
     public OnCampusFragment() {
 
         // Required empty public constructor
@@ -63,25 +75,32 @@ public class OnCampusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_on_campus1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_on_campus_root, container, false);
+        assert rootView != null;
 
-        //Allow access to assets created in xml files for later use
         imageView = (ImageView) rootView.findViewById(R.id.onCampusImageView);
-        goFAB = (FloatingActionButton) rootView.findViewById(R.id.goFab);
+        goFAB = (FloatingActionButton) rootView.findViewById(R.id.goFabOnCampus);
+
+        sceneRoot = (ViewGroup) rootView.findViewById(R.id.on_campus_scene_root);
+
+        scene1 = new Scene(sceneRoot,(ViewGroup) sceneRoot.findViewById(R.id.onCampusLayout));
+
+        scene2 = Scene.getSceneForLayout(sceneRoot, R.layout.fragment_on_campus2, getActivity());
 
 
-        /*
+
+
         //call spinner creation method
-        Spinner startingLocationSpinner =(Spinner) rootView.findViewById(R.id.onCampusStartLocationsSpinner);
+        Spinner startingLocationSpinner =(Spinner) rootView.findViewById(R.id.on_campus_start_loc_spinner);
         populateSpinners(startingLocationSpinner, context, R.array.on_campus_locations );
 
-        Spinner destinationSpinner = (Spinner) rootView.findViewById(R.id.onCampusDestinationSpinner);
+        Spinner destinationSpinner = (Spinner) rootView.findViewById(R.id.on_campus_end_loc_spinner);
         populateSpinners(destinationSpinner, context,R.array.on_campus_locations);
 
 
 
         //Set displayed time as current system time
-        timeTextView = (TextView) rootView.findViewById(R.id.onCampusTime);
+        timeTextView = (TextView) rootView.findViewById(R.id.on_campus_time_text);
         timeTextView.setText(Calendar.getInstance().get(Calendar.HOUR)+":"+
                                 Calendar.getInstance().get(Calendar.MINUTE));
 
@@ -96,7 +115,6 @@ public class OnCampusFragment extends Fragment {
                 }
         );
 
-*/
 
         return rootView;
     }
@@ -114,6 +132,7 @@ public class OnCampusFragment extends Fragment {
                 } else {
                     observer.removeOnGlobalLayoutListener(this);
                 }
+
                 //Call setup for FAB after all views have been drawn in fragment
                 setUpFloatingActionButton();
             }
@@ -143,13 +162,28 @@ public class OnCampusFragment extends Fragment {
 
     private void setUpFloatingActionButton(){
         //Get dimensions of imageView at top of fragment
+
         int imageHeight = imageView.getHeight();
         int imageWidth = imageView.getWidth();
 
         //Set up FAB's location based on imageView's dimensions and FAB's dimensions
         fabLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
-        fabLayoutParams.setMargins(imageWidth - goFAB.getWidth()-40, imageHeight - (goFAB.getHeight()/2), 0, 0); //imageView will sit between two layouts
+        int fabYLocation = imageHeight - goFAB.getHeight()/2;
+        int fabXLocation = imageWidth - goFAB.getWidth() - 40;
+        fabLayoutParams.setMargins(fabXLocation, fabYLocation, 0, 0); //imageView will sit between two layouts
         goFAB.setLayoutParams(fabLayoutParams);
+
+        fabClickedLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT );
+        fabClickedLayoutParams.setMargins(fabXLocation + 80, fabYLocation, 0, 0);
+        goFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                TransitionManager.go(scene2);
+                //goFAB.setLayoutParams(fabClickedLayoutParams);
+
+            }
+        });
 
     }
 

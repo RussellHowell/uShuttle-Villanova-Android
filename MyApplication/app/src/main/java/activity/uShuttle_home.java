@@ -40,7 +40,7 @@ public class uShuttle_home extends ActionBarActivity implements FragmentDrawer.F
         //Display the home fragment by default
         displayView(-1);
 
-        //mToolbar.getBackground().setAlpha(0);
+       //mToolbar.getBackground().setAlpha(0);
 
 
 
