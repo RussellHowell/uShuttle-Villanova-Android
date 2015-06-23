@@ -1,5 +1,6 @@
 package activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 
@@ -31,7 +33,9 @@ public class OnCampusFragment extends Fragment {
     private static int DIALOG_ID;
     int hour;
     int minute;
+    public int tripTime;
     private TextView timeTextView;
+    private TextView meridianTextView;
     private ImageView imageView;
     private FloatingActionButton goFAB;
     private RelativeLayout.LayoutParams fabLayoutParams;
@@ -42,6 +46,7 @@ public class OnCampusFragment extends Fragment {
     private Calendar calender;
     private ViewGroup sceneRoot;
 
+
   //  public BasicTransitionFragment newInstance(){return new BasicTransitionFragment();}
 
     public OnCampusFragment() {
@@ -50,6 +55,7 @@ public class OnCampusFragment extends Fragment {
     }
 
 
+    @SuppressLint("ValidFragment")
     public OnCampusFragment(Context c){
         //Get context from main activity
         context = c;
@@ -62,12 +68,43 @@ public class OnCampusFragment extends Fragment {
     }
 
     protected TimePickerDialog.OnTimeSetListener timePickerListener =
-            new TimePickerDialog.OnTimeSetListener(){
+            new TimePickerDialog.OnTimeSetListener() {
                 @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour){
+                public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
                     hour = hourOfDay;
                     minute = minuteOfHour;
-                    timeTextView.setText(hour + ":" + minute);
+                    String tripTimeString;
+
+                    //if the minute is less than 10 then the leading 0 is not shown
+                    if (minute < 10) {
+                        timeTextView.setText("0"+ minute);
+                    } else
+                        timeTextView.setText("" + minute);
+                        tripTimeString = "" + minute;
+
+                    tripTime = Integer.parseInt("" + hour + timeTextView.getText());
+
+                    //Get meridian from 24 hour format and convert hour to 12-hour-time
+                    if (hour>12){ //PM
+                        meridianTextView.setText("PM");
+                        timeTextView.setText((hour-12) + ":" +timeTextView.getText());
+                        tripTimeString =  (hour-12) + tripTimeString;
+                    }else if(hour<12 && hour > 0) { //AM
+                        meridianTextView.setText("AM");
+                        timeTextView.setText(hour + ":" + timeTextView.getText());
+                        tripTimeString =  (hour) + tripTimeString;
+                    }else if(hour == 0){ //midnight
+                        meridianTextView.setText("AM");
+                        timeTextView.setText(12 + ":" + timeTextView.getText());
+                        tripTimeString =  (12) + tripTimeString;
+                    }else if(hour==12){ //noon
+                        meridianTextView.setText("PM");
+                        timeTextView.setText(12 + ":" + timeTextView.getText());
+                        tripTimeString =  (12) + tripTimeString;
+                    }
+
+                    Toast.makeText(context,"Trip Time:" + tripTime,Toast.LENGTH_SHORT).show();
+
                 }
             };
 
@@ -78,14 +115,18 @@ public class OnCampusFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_on_campus_root, container, false);
         assert rootView != null;
 
+        //allow access to views created in xml
         imageView = (ImageView) rootView.findViewById(R.id.onCampusImageView);
+
         goFAB = (FloatingActionButton) rootView.findViewById(R.id.goFabOnCampus);
 
         sceneRoot = (ViewGroup) rootView.findViewById(R.id.on_campus_scene_root);
-
         scene1 = new Scene(sceneRoot,(ViewGroup) sceneRoot.findViewById(R.id.onCampusLayout));
-
         scene2 = Scene.getSceneForLayout(sceneRoot, R.layout.fragment_on_campus2, getActivity());
+
+        timeTextView = (TextView) rootView.findViewById(R.id.on_campus_time_text);
+        meridianTextView = (TextView) rootView.findViewById(R.id.meridian_text_view);
+
 
 
 
@@ -100,7 +141,6 @@ public class OnCampusFragment extends Fragment {
 
 
         //Set displayed time as current system time
-        timeTextView = (TextView) rootView.findViewById(R.id.on_campus_time_text);
         timeTextView.setText(Calendar.getInstance().get(Calendar.HOUR)+":"+
                                 Calendar.getInstance().get(Calendar.MINUTE));
 
@@ -109,8 +149,9 @@ public class OnCampusFragment extends Fragment {
                 new View.OnClickListener(){
                     @Override
                 public void onClick(View v){
-                        TimePickerDialog picker = new TimePickerDialog(context, timePickerListener,hour, minute, false );
+                        TimePickerDialog picker = new TimePickerDialog(context, timePickerListener, hour, minute, false );
                         picker.show();
+
                     }
                 }
         );
