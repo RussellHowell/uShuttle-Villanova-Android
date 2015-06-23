@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,7 +33,7 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
-
+    uShuttle_home homeActivity;
 
     public FragmentDrawer() {
 
@@ -90,15 +91,14 @@ public class FragmentDrawer extends Fragment {
         }));
 
 
-
+       // homeActivity = new uShuttle_home();
         return layout;
     }
 
-
-    //OPEN DRAWER HERE
-    public  void openNavDrawer(){
-
+    public void openNav(){
+        mDrawerLayout.openDrawer(Gravity.START);
     }
+
 
 
 
@@ -182,4 +182,11 @@ public class FragmentDrawer extends Fragment {
     public interface FragmentDrawerListener {
         public void onDrawerItemSelected(View view, int position);
     }
+
+
+    public void openNavDrawerWrapper(){
+        //uShuttle_home.openNavDrawer(mDrawerLayout);
+    }
+
 }
+

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="androidhive.info.materialdesign.activity.HomeFragment"
+    android:clipToPadding="false"
     android:background="@drawable/vu_church">
 
 

@@ -37,13 +37,19 @@ public class uShuttle_home extends ActionBarActivity implements FragmentDrawer.F
 
 
 
-        //Display the home view by default
+        //Display the home fragment by default
         displayView(-1);
 
+       //mToolbar.getBackground().setAlpha(0);
 
 
 
     }
+
+    public void openNavDrawer(){
+       drawerFragment.openNav();
+    }
+
 
 
     @Override
@@ -83,8 +89,8 @@ public class uShuttle_home extends ActionBarActivity implements FragmentDrawer.F
                 title = getString(R.string.title_home);
                 break;
             case 0:
-                fragment = new FriendsFragment();
-                title = getString(R.string.title_friends);
+                fragment = new OnCampusFragment(this);
+               // title = getString(R.string.title_on_campus);
                 break;
             case 1:
                 fragment = new MessagesFragment();
