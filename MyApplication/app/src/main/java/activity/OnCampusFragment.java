@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import timetable.Shuttle;
 
 import java.util.Calendar;
 
@@ -30,22 +31,20 @@ import russellhowell.ushuttle.R;
 public class OnCampusFragment extends Fragment {
 
     Context context;
-    private static int DIALOG_ID;
-    int hour;
-    int minute;
-    public int tripTime;
+    private static int tripType = 0;
+    private int tripTime;
     private TextView timeTextView;
     private TextView meridianTextView;
     private ImageView imageView;
     private FloatingActionButton goFAB;
     private RelativeLayout.LayoutParams fabLayoutParams;
     private RelativeLayout.LayoutParams fabClickedLayoutParams;
-
     private Scene scene1;
     private Scene scene2;
-    private Calendar calender;
+    private Calendar calendar;
     private ViewGroup sceneRoot;
-
+    Spinner startingLocationSpinner;
+    Spinner destinationSpinner;
 
   //  public BasicTransitionFragment newInstance(){return new BasicTransitionFragment();}
 
@@ -71,40 +70,9 @@ public class OnCampusFragment extends Fragment {
             new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                    hour = hourOfDay;
-                    minute = minuteOfHour;
-                    String tripTimeString;
 
-                    //if the minute is less than 10 then the leading 0 is not shown
-                    if (minute < 10) {
-                        timeTextView.setText("0"+ minute);
-                    } else
-                        timeTextView.setText("" + minute);
-                        tripTimeString = "" + minute;
-
-                    tripTime = Integer.parseInt("" + hour + timeTextView.getText());
-
-                    //Get meridian from 24 hour format and convert hour to 12-hour-time
-                    if (hour>12){ //PM
-                        meridianTextView.setText("PM");
-                        timeTextView.setText((hour-12) + ":" +timeTextView.getText());
-                        tripTimeString =  (hour-12) + tripTimeString;
-                    }else if(hour<12 && hour > 0) { //AM
-                        meridianTextView.setText("AM");
-                        timeTextView.setText(hour + ":" + timeTextView.getText());
-                        tripTimeString =  (hour) + tripTimeString;
-                    }else if(hour == 0){ //midnight
-                        meridianTextView.setText("AM");
-                        timeTextView.setText(12 + ":" + timeTextView.getText());
-                        tripTimeString =  (12) + tripTimeString;
-                    }else if(hour==12){ //noon
-                        meridianTextView.setText("PM");
-                        timeTextView.setText(12 + ":" + timeTextView.getText());
-                        tripTimeString =  (12) + tripTimeString;
-                    }
-
-                    Toast.makeText(context,"Trip Time:" + tripTime,Toast.LENGTH_SHORT).show();
-
+                  tripTime = setFormattedTime(hourOfDay, minuteOfHour);
+                
                 }
             };
 
@@ -127,29 +95,25 @@ public class OnCampusFragment extends Fragment {
         timeTextView = (TextView) rootView.findViewById(R.id.on_campus_time_text);
         meridianTextView = (TextView) rootView.findViewById(R.id.meridian_text_view);
 
-
-
-
-
         //call spinner creation method
-        Spinner startingLocationSpinner =(Spinner) rootView.findViewById(R.id.on_campus_start_loc_spinner);
+        startingLocationSpinner =(Spinner) rootView.findViewById(R.id.on_campus_start_loc_spinner);
         populateSpinners(startingLocationSpinner, context, R.array.on_campus_locations );
 
-        Spinner destinationSpinner = (Spinner) rootView.findViewById(R.id.on_campus_end_loc_spinner);
+        destinationSpinner = (Spinner) rootView.findViewById(R.id.on_campus_end_loc_spinner);
         populateSpinners(destinationSpinner, context,R.array.on_campus_locations);
 
 
 
         //Set displayed time as current system time
-        timeTextView.setText(Calendar.getInstance().get(Calendar.HOUR)+":"+
-                                Calendar.getInstance().get(Calendar.MINUTE));
+        tripTime = setFormattedTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE));
 
         //Set up click listener to bring up the time picker view when fired
         timeTextView.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
                 public void onClick(View v){
-                        TimePickerDialog picker = new TimePickerDialog(context, timePickerListener, hour, minute, false );
+                        TimePickerDialog picker = new TimePickerDialog(context, timePickerListener,
+                                Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE), false );
                         picker.show();
 
                     }
@@ -222,10 +186,50 @@ public class OnCampusFragment extends Fragment {
 
                 TransitionManager.go(scene2);
                 //goFAB.setLayoutParams(fabClickedLayoutParams);
+                Shuttle shuttle = new Shuttle(tripType);
+                shuttle.findTrip(startingLocationSpinner.getSelectedItemPosition(),
+                        destinationSpinner.getSelectedItemPosition(), tripTime);
+
+                //Toast toast = new Toast(context);
+                //toast.makeText(context, shuttle.Arrival, Toast.LENGTH_LONG);
+                //toast.show();
 
             }
         });
 
+    }
+    
+    private int setFormattedTime(int hour, int minute){
+        String tripTimeString;
+     //if the minute is less than 10 then the leading 0 is not shown
+        if (minute < 10) {
+            timeTextView.setText("0"+ minute);
+        } else
+            timeTextView.setText("" + minute);
+        tripTimeString = "" + minute;
+        tripTime = Integer.parseInt("" + hour + timeTextView.getText());
+
+        //Get meridian from 24 hour format and convert hour to 12-hour-time
+        if (hour>12){ //PM
+            meridianTextView.setText("PM");
+            timeTextView.setText((hour-12) + ":" +timeTextView.getText());
+            tripTimeString =  (hour-12) + tripTimeString;
+        }else if(hour<12 && hour > 0) { //AM
+            meridianTextView.setText("AM");
+            timeTextView.setText(hour + ":" + timeTextView.getText());
+            tripTimeString =  (hour) + tripTimeString;
+        }else if(hour == 0){ //midnight
+            meridianTextView.setText("AM");
+            timeTextView.setText(12 + ":" + timeTextView.getText());
+            tripTimeString =  (12) + tripTimeString;
+        }else if(hour==12){ //noon
+            meridianTextView.setText("PM");
+            timeTextView.setText(12 + ":" + timeTextView.getText());
+            tripTimeString =  (12) + tripTimeString;
+        }
+                        
+        return(Integer.parseInt(tripTimeString));
+    
     }
 
 }//End of class
